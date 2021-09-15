@@ -1,7 +1,6 @@
-print("Parser")
-
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
+import json
 
 class Scrapper():
 	hdr = 'headers'
@@ -9,6 +8,7 @@ class Scrapper():
 	page = 'page'
 	soup = 'soup'
 	def __init__(self, site):
+		print("Init... ...")
 		# SETTINGS
 		self.site = site
 		self.hdr = {'User-Agent': 'Mozilla/5.0'}
@@ -20,28 +20,33 @@ class Scrapper():
 		# GET ALL ELEMENTS PRETTIFY
 		elements = self.soup.findAll(True, class_="property-card")
 		number = 0
-
+		elements_array = []
 		for x in elements:
 			number = number + 1
+			
 		# PARSE
 
 			#Title
 			self.prop_title = x.select(prop_title)
 			for title in self.prop_title:
-				print(number, ":", title.text)
+				##print(number, ":", title.text)
+				title = title.text
 
 			#Price
 			self.prop_price = x.select(prop_price)
 			for price in self.prop_price:
-				print(number, ":", price.text)
+				#print(number, ":", price.text)
+				price = price.text
 
 			#Curency
 			self.prop_currency = x.select(prop_price)
 			for currency in self.prop_currency:
 				if "U$S" in currency.text:
-					print(number, ":", "Dolar")
+					#print(number, ":", "Dolar")
+					currency = "U$S"
 				else:
-					print(number, ":", "Peso")
+					#print(number, ":", "Peso")
+					currency = "$"
 
 			#Caracteristics
 			self.prop_rooms = x.findAll(class_= prop_rooms) 
@@ -49,32 +54,52 @@ class Scrapper():
 
 				#Rooms
 				if "Mono" in caracteristic.text:
-					print(number, ":", caracteristic.text)
+					#print(number, ":", caracteristic.text)
+					rooms = caracteristic.text
 				if "Dorm" in caracteristic.text:
-					print(number, ":", caracteristic.text)
+					#print(number, ":", caracteristic.text)
+					rooms = caracteristic.text
 
 				#RestRoom
 				if "Baño" in caracteristic.text:
-					print(number, ":", caracteristic.text)
+					#print(number, ":", caracteristic.text)
+					restroom = caracteristic.text
 
 				#M2
 				if "m²" in caracteristic.text:
-					print(number, ":", caracteristic.text)
+					#print(number, ":", caracteristic.text)
+					size = caracteristic.text
 
 			#Description
 			self.prop_desc = x.find(class_= prop_desc)
 			for desc in self.prop_desc:
 				if desc:
-					print(number, ":", desc.text)
+					#print(number, ":", desc.text)
+					description = desc.text
 				else:
-					print(number, ":", "Sin descripcion")
+					#print(number, ":", "Sin descripcion")
+					description = "Sin descripcion"
 			#Location
 			self.prop_loc = x.select(prop_loc)
-			#print(prop_loc.text)
+			##print(prop_loc.text)
 			for loc in self.prop_loc:
-				print(number, ":", loc.find(text=True, class_= "ant-typography").getText())
-		
+				loc = loc.find(text=True, class_= "ant-typography").getText()
+				#print(number, ":", loc.find(text=True, class_= "ant-typography").getText())
 
+			elements_array.append( { 
+				"title":title,
+				"price":price,
+				"currency":currency,
+				"rooms":rooms,
+				"restroom":restroom,
+				"size":size,
+				"description":description,
+				"local":loc,
+
+				} )
+		
+		#json_string = json.dumps(elements_array)  
+		print(elements_array) 
 
 	"""
 			Data Model array example:
