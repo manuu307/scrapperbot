@@ -2,12 +2,12 @@ import sqlite3
 
 class Datasource():
 	"""docstring for DB"""
+	db = "DB.db"
 	con = 'dbconnection'
-	cur = con.cursor()
-	def __init__(self, db):
-		self.db = db
+	cur = 'cursor'
+	def __init__(self):
 		self.con = sqlite3.connect(str(self.db))
-		print(self.con)
+		self.cur = self.con.cursor()
 		
 	def create_table(self):
 		try:
@@ -18,36 +18,20 @@ class Datasource():
 		except Exception as e:
 			print(e)
 		
-	def insert (self, table, data):
-		"""
-		Data Model array example:
-		
-		self.data = [
-    		("date", today),
-    		("price", 1000),
-    		("currency", $),
-    		("rooms", 3),
-    		("bath", 1),
-    		("m2", 100),
-    		("name", "Casa bonita"),
-    		("description", "Casa muy iluminada"),
-    		("location", "Montevideo, Uruguay"),	
-				]
-
-		"""
+	def insert(self, table, data):
 		try:
 			# Insert a row of data
-			self.cur.executemany("INSERT INTO str(self.table) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?), self.data")
+			self.cur.executemany("INSERT INTO {str(self.table)} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?), {str(self.data)}")
 			# Save (commit) the changes
 			self.con.commit()
 		except Exception as e:
 			print(e)
 		
-	def close_conn (self):
+	def close_conn(self):
 		self.con.close()
 
-datasource = Datasource("DB.db")
-datasource.create_table()
+
+
 
 
 

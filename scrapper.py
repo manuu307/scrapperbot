@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 from urllib.request import Request, urlopen
 import json
-
+import base64
 class Scrapper():
 	hdr = 'headers'
 	req = 'request'
@@ -86,35 +86,18 @@ class Scrapper():
 				loc = loc.find(text=True, class_= "ant-typography").getText()
 				#print(number, ":", loc.find(text=True, class_= "ant-typography").getText())
 
-			elements_array.append( { 
-				"title":title,
-				"price":price,
-				"currency":currency,
-				"rooms":rooms,
-				"restroom":restroom,
-				"size":size,
-				"description":description,
-				"local":loc,
-
-				} )
+			elements_array.append({
+				"p_title":title,
+				"p_price":price,
+				"p_currency":currency,
+				"p_rooms":rooms,
+				"p_restroom":restroom,
+				"p_size":size,
+				"p_description":description,
+				"p_local":loc,
+				})
 		
-		#json_string = json.dumps(elements_array)  
-		print(elements_array) 
+		json_string = json.dumps(elements_array) 
+		return json_string 
 
-	"""
-			Data Model array example:
-			
-			self.data = [
-	    		("date", today),
-	    		("price", 1000),
-	    		("currency", $),
-	    		("rooms", 3),
-	    		("bath", 1),
-	    		("m2", 100),
-	    		("name", "Casa bonita"),
-	    		("description", "Casa muy iluminada"),
-	    		("location", "Montevideo, Uruguay"),	
-					]
-
-			"""
-Scrapper("https://www.infocasas.com.uy/venta/inmuebles/montevideo").scrapping("h4.property-title", "span.price", "ant-typography ant-typography-ellipsis", "property-description", "span.property-location-tag")
+	
